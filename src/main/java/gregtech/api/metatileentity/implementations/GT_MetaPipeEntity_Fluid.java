@@ -551,6 +551,18 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
     	return null;
     }
 
+    @Override
+    public final FluidStack drain(ForgeDirection aSide, FluidStack aFluid, boolean doDrain) {
+        FluidStack drained = null;
+        for (int i = 0; i < mPipeAmount; i++) {
+            if (aFluid.isFluidEqual(mFluids[i])) {
+                if ((drained = drainFromIndex(aFluid.amount,doDrain,i)) != null)
+                    return drained;
+            }
+        }
+        return null;
+    }
+
     private final FluidStack drainFromIndex(int maxDrain, boolean doDrain, int index) {
     	if (index < 0 || index >= mPipeAmount) return null;
     	if (mFluids[index] == null) return null;
