@@ -108,7 +108,7 @@ public class GT_MetaPipeEntity_Fluid extends MetaPipeEntity {
         byte south = (byte) ForgeDirection.SOUTH.ordinal();
         byte unknown = (byte) ForgeDirection.UNKNOWN.ordinal();
         byte[][] sRestrictionArray = new byte[][]{
-        	{north, south, west, east}, //down should be east, west, but bugs out.
+        	{north, south, east, west}, //down
         	{north, south, west, east}, //up
         	{up, down, west, east}, //north
         	{up, down, west, east}, //south
