@@ -66,6 +66,14 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
         GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal(mVoidOverflow ? "GT5U.machines.voidoveflow.enabled" : "GT5U.machines.voidoveflow.disabled"));
     }
 
+    protected boolean mVoidOverflow = false;
+
+    @Override
+    public final void onScrewdriverRightClick(byte aSide, EntityPlayer aPlayer, float aX, float aY, float aZ) {
+        mVoidOverflow = !mVoidOverflow;
+        GT_Utility.sendChatToPlayer(aPlayer, StatCollector.translateToLocal("GT5U.machines.voidoveflow") +" "+mVoidOverflow);
+    }
+
     @Override
     public Object getServerGUI(int aID, InventoryPlayer aPlayerInventory, IGregTechTileEntity aBaseMetaTileEntity) {
         return new GT_Container_QuantumChest(aPlayerInventory, aBaseMetaTileEntity);
@@ -200,8 +208,8 @@ public abstract class GT_MetaTileEntity_DigitalChestBase extends GT_MetaTileEnti
             setItemCount(aNBT.getInteger("mItemCount"));
         if (aNBT.hasKey("mItemStack"))
             setItemStack(ItemStack.loadItemStackFromNBT((NBTTagCompound) aNBT.getTag("mItemStack")));
-        mVoidOverflow = aNBT.getBoolean("mVoidOverflow");
-        
+        if (aNBT.hasKey("mVoidOverflow"))
+            mVoidOverflow = aNBT.getBoolean("mVoidOverflow");
     }
 
     @Override
