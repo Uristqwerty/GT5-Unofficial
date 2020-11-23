@@ -137,6 +137,31 @@ public class GT_OreDictUnificator {
         return get(true, aStack);
     }
 
+    public static ItemStack getStackAndWhetherBlacklistHadAnyEffect(ItemStack aStack, boolean[] blacklistMattered) {
+        blacklistMattered[0] = false;
+        if (GT_Utility.isStackInvalid(aStack)) return null;
+        ItemData tPrefixMaterial = getAssociation(aStack);
+        ItemStack rStack = null;
+        if (tPrefixMaterial == null || !tPrefixMaterial.hasValidPrefixMaterialData()) {
+            return GT_Utility.copy(aStack);
+        } else if(tPrefixMaterial.mBlackListed) {
+            blacklistMattered[0] = true;
+            return GT_Utility.copy(aStack);
+        }
+        if (!GregTech_API.sUnificationEntriesRegistered && isBlacklisted(aStack)) {
+            tPrefixMaterial.mBlackListed = true;
+            blacklistMattered[0] = true;
+            return GT_Utility.copy(aStack);
+        }
+        if (tPrefixMaterial.mUnificationTarget == null)
+            tPrefixMaterial.mUnificationTarget = sName2StackMap.get(tPrefixMaterial.toString());
+        rStack = tPrefixMaterial.mUnificationTarget;
+        if (GT_Utility.isStackInvalid(rStack)) return GT_Utility.copy(aStack);
+        assert rStack != null;
+        rStack.setTagCompound(aStack.getTagCompound());
+        return GT_Utility.copyAmount(aStack.stackSize, rStack);
+    }
+
     public static ItemStack get(boolean aUseBlackList, ItemStack aStack) {
         if (GT_Utility.isStackInvalid(aStack)) return null;
         ItemData tPrefixMaterial = getAssociation(aStack);

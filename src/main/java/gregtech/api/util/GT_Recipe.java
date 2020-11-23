@@ -388,12 +388,16 @@ public class GT_Recipe implements Comparable<GT_Recipe> {
 
         if (mInputs.length > 0 && aInputs == null) return false;
 
+        boolean[] blacklistMattered = {false};
         for (ItemStack tStack : mInputs) {
             if (tStack != null) {
                 amt = tStack.stackSize;
                 boolean temp = true;
+                ItemStack unified_tStack = GT_OreDictUnificator.get(tStack);
                 for (ItemStack aStack : aInputs) {
-                    if ((GT_Utility.areUnificationsEqual(aStack, tStack, true) || GT_Utility.areUnificationsEqual(GT_OreDictUnificator.get(false, aStack), tStack, true))) {
+                    ItemStack unified_aStack = GT_OreDictUnificator.getStackAndWhetherBlacklistHadAnyEffect(aStack, blacklistMattered);
+                    if ((GT_Utility.areStacksEqual(unified_aStack, unified_tStack, true)
+                            || (blacklistMattered[0] && GT_Utility.areStacksEqual(GT_OreDictUnificator.get(false, aStack), unified_tStack, true)))) {
                         if (GTppRecipeHelper) {//remove once the fix is out
                             if (GT_Utility.areStacksEqual(aStack, Ic2Items.FluidCell.copy(), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataStick.get(1L), true) || GT_Utility.areStacksEqual(aStack, ItemList.Tool_DataOrb.get(1L), true)) {
                                 if (!GT_Utility.areStacksEqual(aStack, tStack, false))
